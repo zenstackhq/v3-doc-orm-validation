@@ -25,92 +25,33 @@ export const schema = {
                     name: "email",
                     type: "String",
                     unique: true,
-                    attributes: [{ name: "@unique" }]
+                    attributes: [{ name: "@unique" }, { name: "@email" }, { name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(5) }, { name: "max", value: ExpressionUtils.literal(80) }] }]
                 },
-                posts: {
-                    name: "posts",
-                    type: "Post",
-                    array: true,
-                    relation: { opposite: "author" }
+                age: {
+                    name: "age",
+                    type: "Int",
+                    attributes: [{ name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(0) }] }, { name: "@lt", args: [{ name: "value", value: ExpressionUtils.literal(150) }] }]
+                },
+                role: {
+                    name: "role",
+                    type: "Role"
                 }
             },
+            attributes: [
+                { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.binary(ExpressionUtils.field("role"), "!=", ExpressionUtils.literal("ADMIN")), "||", ExpressionUtils.binary(ExpressionUtils.field("age"), ">=", ExpressionUtils.literal(18))) }, { name: "message", value: ExpressionUtils.literal("Admin must be an adult") }] },
+                { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.binary(ExpressionUtils.field("role"), "!=", ExpressionUtils.literal("ADMIN")), "||", ExpressionUtils.call("endsWith", [ExpressionUtils.field("email"), ExpressionUtils.literal("zenstack.dev")])) }, { name: "message", value: ExpressionUtils.literal("Admin must have a zenstack email") }] }
+            ],
             idFields: ["id"],
             uniqueFields: {
                 id: { type: "Int" },
                 email: { type: "String" }
             }
-        },
-        Post: {
-            name: "Post",
-            fields: {
-                id: {
-                    name: "id",
-                    type: "Int",
-                    id: true,
-                    attributes: [{ name: "@id" }, { name: "@default", args: [{ name: "value", value: ExpressionUtils.call("autoincrement") }] }],
-                    default: ExpressionUtils.call("autoincrement")
-                },
-                createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ name: "@default", args: [{ name: "value", value: ExpressionUtils.call("now") }] }],
-                    default: ExpressionUtils.call("now")
-                },
-                updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    updatedAt: true,
-                    attributes: [{ name: "@updatedAt" }]
-                },
-                title: {
-                    name: "title",
-                    type: "String"
-                },
-                content: {
-                    name: "content",
-                    type: "String",
-                    optional: true
-                },
-                slug: {
-                    name: "slug",
-                    type: "String",
-                    unique: true,
-                    optional: true,
-                    attributes: [{ name: "@unique" }]
-                },
-                viewCount: {
-                    name: "viewCount",
-                    type: "Int",
-                    attributes: [{ name: "@default", args: [{ name: "value", value: ExpressionUtils.literal(0) }] }],
-                    default: 0
-                },
-                published: {
-                    name: "published",
-                    type: "Boolean",
-                    attributes: [{ name: "@default", args: [{ name: "value", value: ExpressionUtils.literal(false) }] }],
-                    default: false
-                },
-                author: {
-                    name: "author",
-                    type: "User",
-                    optional: true,
-                    attributes: [{ name: "@relation", args: [{ name: "fields", value: ExpressionUtils.array([ExpressionUtils.field("authorId")]) }, { name: "references", value: ExpressionUtils.array([ExpressionUtils.field("id")]) }] }],
-                    relation: { opposite: "posts", fields: ["authorId"], references: ["id"] }
-                },
-                authorId: {
-                    name: "authorId",
-                    type: "Int",
-                    optional: true,
-                    foreignKeyFor: [
-                        "author"
-                    ]
-                }
-            },
-            idFields: ["id"],
-            uniqueFields: {
-                id: { type: "Int" },
-                slug: { type: "String" }
-            }
+        }
+    },
+    enums: {
+        Role: {
+            USER: "USER",
+            ADMIN: "ADMIN"
         }
     },
     authType: "User",

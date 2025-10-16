@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "generate": "zen generate",
-    "dev": "tsx main.ts"
+    "dev": "npm run generate && tsx main.ts"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
