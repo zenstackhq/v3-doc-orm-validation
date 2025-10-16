@@ -14,5 +14,8 @@ model User {
     role   Role
 
     @@validate(role != 'ADMIN' || age >= 18, 'Admin must be an adult')
-    @@validate(role != 'ADMIN' || endsWith(email, 'zenstack.dev'), 'Admin must have a zenstack email')
+    @@validate(
+        role != 'ADMIN' || endsWith(email, 'zenstack.dev'),
+        'Admin must have a zenstack email'
+    )
 }
