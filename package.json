@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@zenstackhq/kysely-sql-js": "next",
-    "@zenstackhq/runtime": "next",
+    "@zenstackhq/orm": "next",
     "sql.js": "^1.13.0"
   }
 }
