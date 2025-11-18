@@ -3,18 +3,18 @@
   "private": true,
   "scripts": {
     "generate": "zen generate",
-    "dev": "npm run generate && tsx main.ts"
+    "dev": "npm run generate && tsx main.ts",
+    "up": "npm i @zenstackhq/cli@next @zenstackhq/orm@next"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
     "@types/sql.js": "^1.4.9",
-    "@zenstackhq/cli": "^3.0.0-beta.19",
+    "@zenstackhq/cli": "^3.0.0-beta.24",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@zenstackhq/kysely-sql-js": "^3.0.0-beta.19",
-    "@zenstackhq/orm": "^3.0.0-beta.19",
+    "@zenstackhq/orm": "^3.0.0-beta.24",
     "sql.js": "^1.13.0"
   }
 }

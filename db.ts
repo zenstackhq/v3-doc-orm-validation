@@ -1,5 +1,5 @@
-import { SqlJsDialect } from '@zenstackhq/kysely-sql-js';
 import { ZenStackClient } from '@zenstackhq/orm';
+import { SqlJsDialect } from '@zenstackhq/orm/dialects/sql.js';
 import initSqlJs from 'sql.js';
 import { schema } from './zenstack/schema';
 
