@@ -5,7 +5,7 @@
 
 /* eslint-disable */
 
-import { type SchemaDef, ExpressionUtils } from "@zenstackhq/schema";
+import { type SchemaDef, type AttributeApplication, type FieldDefault, ExpressionUtils } from "@zenstackhq/schema";
 export class SchemaType implements SchemaDef {
     provider = {
         type: "sqlite"
@@ -18,19 +18,19 @@ export class SchemaType implements SchemaDef {
                     name: "id",
                     type: "Int",
                     id: true,
-                    attributes: [{ name: "@id" }, { name: "@default", args: [{ name: "value", value: ExpressionUtils.call("autoincrement") }] }],
-                    default: ExpressionUtils.call("autoincrement")
+                    attributes: [{ name: "@id" }, { name: "@default", args: [{ name: "value", value: ExpressionUtils.call("autoincrement") }] }] as readonly AttributeApplication[],
+                    default: ExpressionUtils.call("autoincrement") as FieldDefault
                 },
                 email: {
                     name: "email",
                     type: "String",
                     unique: true,
-                    attributes: [{ name: "@unique" }, { name: "@email" }, { name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(5) }, { name: "max", value: ExpressionUtils.literal(80) }] }]
+                    attributes: [{ name: "@unique" }, { name: "@email" }, { name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(5) }, { name: "max", value: ExpressionUtils.literal(80) }] }] as readonly AttributeApplication[]
                 },
                 age: {
                     name: "age",
                     type: "Int",
-                    attributes: [{ name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(0) }] }, { name: "@lt", args: [{ name: "value", value: ExpressionUtils.literal(150) }] }]
+                    attributes: [{ name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(0) }] }, { name: "@lt", args: [{ name: "value", value: ExpressionUtils.literal(150) }] }] as readonly AttributeApplication[]
                 },
                 role: {
                     name: "role",
@@ -40,7 +40,7 @@ export class SchemaType implements SchemaDef {
             attributes: [
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.binary(ExpressionUtils.field("role"), "!=", ExpressionUtils.literal("ADMIN")), "||", ExpressionUtils.binary(ExpressionUtils.field("age"), ">=", ExpressionUtils.literal(18))) }, { name: "message", value: ExpressionUtils.literal("Admin must be an adult") }] },
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.binary(ExpressionUtils.field("role"), "!=", ExpressionUtils.literal("ADMIN")), "||", ExpressionUtils.call("endsWith", [ExpressionUtils.field("email"), ExpressionUtils.literal("zenstack.dev")])) }, { name: "message", value: ExpressionUtils.literal("Admin must have a zenstack email") }] }
-            ],
+            ] as readonly AttributeApplication[],
             idFields: ["id"],
             uniqueFields: {
                 id: { type: "Int" },
